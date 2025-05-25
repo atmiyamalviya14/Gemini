@@ -1,44 +1,38 @@
-import React, { useState } from 'react'
-import Sidebar from './components/Sidebar'
-import Landing from './components/Landing'
+import React, { useState, useEffect } from 'react';
+import Sidebar from './components/Sidebar';
+import Landing from './components/Landing';
+import {
+  saveMessagesToLocalStorage,
+  loadMessagesFromLocalStorage,
+} from '../utils/LocalsStorage';
 
 const App = () => {
-  const [chats, setChats] = useState([{ id: Date.now(), messages: [] }]);
+  const [messages, setMessages] = useState([]);
 
-  const [activeChatIndex, setActiveChatIndex] = useState(0);
+  // ✅ Load messages from localStorage on mount
+  useEffect(() => {
+    const savedMessages = loadMessagesFromLocalStorage();
+    if (savedMessages && savedMessages.length > 0) {
+      setMessages(savedMessages);
+    }
+  }, []);
 
-  const updateMessages = (newMessages) => {
-    setChats((prev) =>
-      prev.map((chat, i) =>
-        i === activeChatIndex ? { ...chat, messages: newMessages } : chat
-      )
-    );
-  };
+  // ✅ Save messages to localStorage whenever they change
+  useEffect(() => {
+    saveMessagesToLocalStorage(messages);
+  }, [messages]);
 
-  const handleNewChat = () => {
-    const newChat = { id: Date.now(), messages: [] };
-    setChats([...chats, newChat]);
-    setActiveChatIndex(chats.length);
-  };
-
-  const handleChatSelect = (index) => {
-    setActiveChatIndex(index);
-  };
+  // 🧠 Log messages when they change
+  useEffect(() => {
+    messages.forEach((msg, i) => {
+      console.log(` ${msg.sender.toUpperCase()}: ${msg.text}`);
+    });
+  }, [messages]);
 
   return (
     <>
-      <Sidebar
-        chats={chats}
-        activeIndex={activeChatIndex}
-        onNewChat={handleNewChat}
-        onSelectChat={handleChatSelect}
-      />
-      <Landing
-  messages={Array.isArray(chats[activeChatIndex]?.messages) ? chats[activeChatIndex].messages : []}
-  setMessages={updateMessages}
-/>
-
-
+      <Sidebar messages={messages} />
+      <Landing messages={messages} setMessages={setMessages} />
     </>
   );
 };

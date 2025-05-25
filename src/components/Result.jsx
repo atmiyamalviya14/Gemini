@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 const Result = ({ messages, isTyping }) => {
-const lastMessages = Array.isArray(messages) ? messages.slice(-2) : [];
-
   const containerRef = useRef(null);
-
   useEffect(() => {
     if (containerRef.current) {
       // Scroll to bottom on new message
@@ -33,27 +30,27 @@ const lastMessages = Array.isArray(messages) ? messages.slice(-2) : [];
           </div>
         )}
 
-       {(Array.isArray(messages) ? messages.slice() : [])
-  .reverse()
-  .map((msg, index) => (
-    <div
-      key={index}
-      className={`w-full flex ${
-        msg.sender === "user" ? "justify-end" : "justify-start"
-      }`}
-    >
-      <p
-        className={`text-[16px] py-3 px-4 rounded-2xl text-white max-w-[70%] ${
-          msg.sender === "user"
-            ? "bg-[#333537] rounded-br-md"
-            : "bg-[#2c2c2e] rounded-bl-md"
-        }`}
-      >
-        {msg.text}
-      </p>
-    </div>
-))}
-
+        {messages
+          .slice()
+          .reverse()
+          .map((msg, index) => (
+            <div
+              key={index}
+              className={`w-full flex ${
+                msg.sender === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              <p
+                className={`text-[16px] py-3 px-4 rounded-2xl text-white max-w-[70%] ${
+                  msg.sender === "user"
+                    ? "bg-[#333537] rounded-br-md"
+                    : "bg-[#2c2c2e] rounded-bl-md"
+                }`}
+              >
+                {msg.text}
+              </p>
+            </div>
+          ))}
       </div>
     </div>
   );

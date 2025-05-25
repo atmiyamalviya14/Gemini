@@ -1,10 +1,10 @@
+// src/gemini.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-const MODEL_NAME = "gemini-1.5-flash-latest"; // Or try "gemini-1.5-flash-latest"
+const MODEL_NAME = "gemini-1.5-flash-latest";
 
-async function generateGeminiResponse(prompt) {
+export async function generateGeminiResponse(prompt) {
   try {
     const model = genAI.getGenerativeModel({ model: MODEL_NAME });
     const result = await model.generateContent(prompt);
@@ -21,5 +21,3 @@ async function generateGeminiResponse(prompt) {
     throw error;
   }
 }
-
-export { generateGeminiResponse };
